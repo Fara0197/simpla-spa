@@ -16,7 +16,7 @@ html {
 }
 body {
   min-height: 100vh;
-  background-color: hsl(20, 30%, 90%);
+  background-color: hsl(176, 10%, 73%);
 }
 
 /*******************
@@ -24,7 +24,7 @@ body {
 *******************/
 
 header {
-  background-color: hsl(20, 40%, 40%);
+  background-color: hsl(168, 38%, 10%);
   color: hsl(20, 40%, 100%);
   display: flex;
   flex-direction: column;
@@ -85,7 +85,7 @@ header form {
 *******************/
 
 #instructions {
-  display: none;
+  display: block;
 }
 #actors {
   display: none;
@@ -110,9 +110,29 @@ header form {
 .content p {
   padding: 0 1rem;
   margin: 1rem 0;
-  color: hsl(20, 10%, 50%);
+  color: white;
+  display: flex;
 }
 
+
+.card-div{
+background-color: hsl(168, 38%, 10%);
+display:flex;
+flex-wrap: wrap;
+flex-direction:row;
+margin: 0;
+}
+.div{
+border: 3px solid black;
+color: white;
+padding: 1rem;
+}
+
+h3{
+padding: 0 1rem;
+margin: 1rem 0;
+font-size: 1.5rem;
+}
 /***********************
   Effects
 ***********************/
@@ -172,3 +192,5 @@ header form {
     width: 42px;
   }
 }
+
+
