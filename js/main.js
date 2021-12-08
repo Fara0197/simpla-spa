@@ -125,10 +125,13 @@ const ACTORS = {
 
 
       //appending
+   
       divBody.append(h3, divPop, divKnown);
       cardDiv.append(img, divBody);
       dFrag.append(cardDiv);
     });
+  
+    cardDivSection.innerHTML = '';
     cardDivSection.append(dFrag);
 
     let actorDiv = document.getElementById("actor-Section");
