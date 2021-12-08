@@ -116,17 +116,21 @@ const ACTORS = {
 
       //display popularity and what actor is known for, as paragraphs div
       let divPop = document.createElement("p");
-      divPop.className = "text-card";
+      divPop.className = "text-card-pop";
       divPop.innerHTML = `Popularity: ${actor.popularity}`;
 
       let divKnown = document.createElement("p");
       divKnown.className = "text-card";
-      divKnown.innerHTML = `Known for: ${actor.known_for_department}`;
+      divKnown.innerHTML = `Known for Department: ${actor.known_for_department}`;
 
+
+      let divKnownFor = document.createElement("p");
+      divKnownFor.className = "text-card";
+      divKnownFor.innerHTML = `Known for in Media: ${actor.known_for[0].original_title}`; //test for media display
 
       //appending
    
-      divBody.append(h3, divPop, divKnown);
+      divBody.append(h3, divPop, divKnown, divKnownFor);
       cardDiv.append(img, divBody);
       dFrag.append(cardDiv);
     });
@@ -142,28 +146,20 @@ const ACTORS = {
 //media is for changes connected to content in the media section
 //method: look inside index positions of actors in the array, and take the known for array to display the media 
 const MEDIA = {
-  displayMedia: (ev) => {
+  displayMedia: (ev) =>  {
     let actorMediaID = ev.target.closest('.div').getAttribute('data-id');
     let mediaContent = document.querySelector("#media-content");
     let df = document.createDocumentFragment();
-    // let mediaCardSection = document.createElement('div');
-    // mediaCardSection.className = "div";
+    // console.log(actorMediaID);// testing click on cards 
 
-
-    SEARCH.results.forEach((actor) =>{
-      // if(actor.id == actorMediaID){
-        // actor.known_for.forEach((media)=>{
-          
-
+    SEARCH.results.forEach((actor)=>{
+      if(actor.id == actorMediaID){
+      actor.known_for.forEach((media)=>{
       
-
-
-       
-   
-  
+      })
+      }
     })
-
-
+    
 
 
   },

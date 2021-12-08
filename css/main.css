@@ -41,6 +41,10 @@ header form {
 header h1 {
   text-shadow: 2px 2px 2px hsl(20, 10%, 30%);
 }
+h1 img{
+max-width: 30rem;
+opacity: 0.6;
+}
 header form {
   display: flex;
   justify-content: center;
@@ -112,6 +116,8 @@ header form {
   margin: 1rem 0;
   color: white;
   display: flex;
+  flex-wrap: wrap;
+
 }
 
 
@@ -122,11 +128,18 @@ flex-wrap: wrap;
 flex-direction:row;
 margin: 0;
 justify-content: center;
+overflow: hidden;
 }
 .div{
-border: 3px solid black;
+border: 0.5rem solid black;
 color: white;
 padding: 1rem;
+background-color: hsl(162, 11%, 42%);
+}
+
+.text-card-pop{
+font-weight: bolder;
+text-decoration: underline;
 }
 
 h3{
