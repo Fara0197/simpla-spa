@@ -82,8 +82,8 @@ const ACTORS = {
     //put click listener inside function below
     actorResults.forEach((actor) => {
       //build the initial div
-      let columnDiv = document.createElement("div");
-      columnDiv.className = "col";
+      // let columnDiv = document.createElement("div");
+      // columnDiv.className = "col";
 
       let cardDiv = document.createElement("div");
       cardDiv.className = "div";
@@ -123,6 +123,7 @@ const ACTORS = {
       divKnown.className = "text-card";
       divKnown.innerHTML = `Known for: ${actor.known_for_department}`;
 
+
       //appending
       divBody.append(h3, divPop, divKnown);
       cardDiv.append(img, divBody);
@@ -136,10 +137,30 @@ const ACTORS = {
 };
 
 //media is for changes connected to content in the media section
+//method: look inside index positions of actors in the array, and take the known for array to display the media 
 const MEDIA = {
   displayMedia: (ev) => {
     let actorMediaID = ev.target.closest('.div').getAttribute('data-id');
-    console.log(actorMediaID);
+    let mediaContent = document.querySelector("#media-content");
+    let df = document.createDocumentFragment();
+    // let mediaCardSection = document.createElement('div');
+    // mediaCardSection.className = "div";
+
+
+    SEARCH.results.forEach((actor) =>{
+      // if(actor.id == actorMediaID){
+        // actor.known_for.forEach((media)=>{
+          
+
+      
+
+
+       
+   
+  
+    })
+
+
 
 
   },
