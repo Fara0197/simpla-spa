@@ -2,9 +2,9 @@
 //and connections between the other components
 
 const APP = {
-  key: '9eb5fbb08f7a18ab176e471ff7b6d333',
-  baseURL: 'https://api.themoviedb.org/3/',
-  baseImageUrl: 'https://image.tmdb.org/t/p/w500',
+  key: "9eb5fbb08f7a18ab176e471ff7b6d333",
+  baseURL: "https://api.themoviedb.org/3/",
+  baseImageUrl: "https://image.tmdb.org/t/p/w500",
 
   init: () => {
     //this function runs when the page loads and click listener on search
@@ -17,34 +17,33 @@ const APP = {
 const SEARCH = {
   //empty array
   results: [],
-  input:'',
+  input: "",
 
   //search function
   doSearch: (ev) => {
     ev.preventDefault();
     SEARCH.input = document.getElementById("search").value;
     let key = STORAGE.base_key + SEARCH.input;
-    
-    if(key in localStorage){
+
+    if (key in localStorage) {
       ACTORS.actorResults = localStorage.getItem(key);
       ACTORS.displayActor(JSON.parse(ACTORS.actorResults));
-    }
-    else{
+    } else {
       SEARCH.doFetch();
     }
   },
 
   doFetch() {
     let url = `${APP.baseURL}search/person?api_key=${APP.key}&query=${SEARCH.input}&language=en-US`;
-    console.log('doing a fetch..');
+    console.log("doing a fetch..");
     fetch(url)
       .then((response) => {
         // see if it has an okay status
         if (response.ok) {
-        return response.json();
+          return response.json();
         } else {
           throw new Error(
-          `Error ${response.status_code} ${response.status_message}`
+            `Error ${response.status_code} ${response.status_message}`
           );
         }
       })
@@ -72,8 +71,8 @@ const ACTORS = {
     let homePage = document.getElementById("instructions");
     let actorsPage = document.getElementById("actors");
 
-    homePage.style.display = 'none';
-    actorsPage.style.display = 'block';
+    homePage.style.display = "none";
+    actorsPage.style.display = "block";
 
     let dFrag = document.createDocumentFragment();
     let cardDivSection = document.createElement("div");
@@ -87,6 +86,7 @@ const ACTORS = {
 
       let cardDiv = document.createElement("div");
       cardDiv.className = "div";
+
       //click listen for media name space
       cardDiv.addEventListener("click", MEDIA.displayMedia);
       cardDiv.setAttribute("click", actor.id);
@@ -113,7 +113,6 @@ const ACTORS = {
       h3.className = "card-title";
       h3.innerHTML = `Actor: ${actor.name}`;
 
-
       //display popularity and what actor is known for, as paragraphs div
       let divPop = document.createElement("p");
       divPop.className = "text-card-pop";
@@ -123,19 +122,17 @@ const ACTORS = {
       divKnown.className = "text-card";
       divKnown.innerHTML = `Known for Department: ${actor.known_for_department}`;
 
-
       let divKnownFor = document.createElement("p");
       divKnownFor.className = "text-card";
       divKnownFor.innerHTML = `Known for in Media: ${actor.known_for[0].original_title}`; //test for media display
 
       //appending
-   
       divBody.append(h3, divPop, divKnown, divKnownFor);
       cardDiv.append(img, divBody);
       dFrag.append(cardDiv);
     });
-  
-    cardDivSection.innerHTML = '';
+
+    cardDivSection.innerHTML = "";
     cardDivSection.append(dFrag);
 
     let actorDiv = document.getElementById("actor-Section");
@@ -144,24 +141,58 @@ const ACTORS = {
 };
 
 //media is for changes connected to content in the media section
-//method: look inside index positions of actors in the array, and take the known for array to display the media 
+//display known for object and (picture of media, title of media, year of media)
+//method: look inside index positions of actors in the array, and take the known for array to display the media
 const MEDIA = {
-  displayMedia: (ev) =>  {
-    let actorMediaID = ev.target.closest('.div').getAttribute('data-id');
+  displayMedia: (ev) => {
+    let actorMediaID = ev.target.closest(".div").getAttribute("data-id");
     let mediaContent = document.querySelector("#media-content");
     let df = document.createDocumentFragment();
-    // console.log(actorMediaID);// testing click on cards 
+    // console.log(actorMediaID);// testing click on cards
 
-    SEARCH.results.forEach((actor)=>{
-      if(actor.id == actorMediaID){
-      actor.known_for.forEach((media)=>{
-      
-      })
+    let actorsPage = document.getElementById("actors");
+    let moviePage = document.getElementById("media");
+
+    actorsPage.style.display = "none";
+    moviePage.style.display = "block";
+
+    let mediaDivSection = document.createElement("div");
+    mediaDivSection.className = "media-card";
+
+    //error message here 
+    actorMediaID.forEach((media) => {
+      let mediaDiv = document.createElement("div");
+      mediaDiv.className = "div";
+
+      let img = document.createElement("img");
+      img.className = "media-img";
+      if (actor.known_for.poster_path) {
+        img.src = APP.baseImageUrl + actor.known_for.poster_path;
+      } else {
+        //placeholder image
+        img.src = " https://via.placeholder.com/150";
       }
-    })
-    
+
+      img.style.maxWidth = "50%";
+      img.alt = actor.name;
+
+      let mediaBody = document.createElement("div");
+      mediaBody.className = 'media-body';
 
 
+      let divKnownForMedia = document.createElement("p");
+      divKnownForMedia.className = "text-card";
+      divKnownForMedia.innerHTML = `Known for in Media: ${actor.known_for[0].original_title}`; //test for media display    let 
+
+      //appending elements to media body
+
+      mediaBody.append(divKnownForMedia);
+      mediaDiv.append(mediaDiv, img);
+      df.append(mediaDiv);
+    });
+
+    mediaDivSection.innerHTML = "";
+   mediaDivSection.append(df);
   },
 };
 
@@ -177,7 +208,6 @@ const STORAGE = {
     localStorage.setItem(key, JSON.stringify(results));
     // STORAGE.keys.push(key); //push key to empty array
     // console.log(STORAGE.keys);
-
   },
 };
 
