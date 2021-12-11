@@ -160,22 +160,19 @@ const ACTORS = {
 //display known for object and (picture of media, title of media, year of media)
 //method: look inside index positions of actors in the array, and take the known for array to display the media
 const MEDIA = {
-  mediaActorId: null,
-  Media: [],
+  medias: [],
 
   //history function
   setHistory: (ev) => {
-    let actorMediaTarget = ev.target.closest(".div");
-    MEDIA.mediaActorId = actorMediaTarget.getAttribute("data-id");
-    //test
-    // console.log(actorMediaTarget);
-
-
-    history.pushState({}, "", `${location.hash}/${MEDIA.mediaActorId}`);
-    MEDIA.displayMedia(MEDIA.mediaActorId);
+    let actorMediaID = ev.target.closest(".div").getAttribute("data-id");
+    // console.log(actorMediaID);
+    
+    history.pushState({}, "", `${location.href}/${MEDIA.actorMediaID}`);
+    MEDIA.displayMedia(MEDIA.actorMediaID);
   },
 
-  displayMedia: (mediaActorId) => {
+  displayMedia: (ev) => {
+    console.log("media page - displayed"); //test
     // let actorMediaID = ev.target.closest(".div").getAttribute("data-id");
     // console.log(actorMediaID);// testing click on cards
 
@@ -185,17 +182,20 @@ const MEDIA = {
     actorsPage.style.display = "none";
     moviePage.style.display = "block";
 
-    let key = STORAGE.base_key + SEARCH.input;
-    let media = JSON.parse(localStorage.getItem(key));
-    let df = document.createDocumentFragment();
-    //error message here: use actorMediaID?
-    media.forEach((actor) => {
-      if (actor.id == MEDIA.mediaActorId) {
-        actor.known_for.forEach((media) => {
-          //main section - media page
-          let mediaDivSection = document.createElement("div");
-          mediaDivSection.className = "media-section";
+    //place the back button here
 
+    let key = STORAGE.base_key + SEARCH.input;
+    let mediaInput = JSON.parse(localStorage.getItem(key));
+    let df = document.createDocumentFragment();
+
+    //main section - get main media page section
+    let mediaDivSection = document.getElementById("media-content");
+   
+    //error message here? media not displaying anymore
+    //function stops working here
+    mediaInput.forEach((actor) => {
+      if (actor.id == MEDIA.actorMediaID) {
+        actor.known_for.forEach((media) => {
           // media cards
           let mediaCard = document.createElement("div");
           mediaCard.className = "media-card";
@@ -233,17 +233,16 @@ const MEDIA = {
           mediaDate.className = "text-card";
           mediaDate.innerHTML = `Known for in Media: ${media.release_date}`;
 
+          //appending elements to media
+          mediaCardBody.append(mediaTitle, mediaDate);
+          mediaCard.append(imgMedia, mediaCardBody);
+          mediaDivSection.append(mediaCard);
+
+          mediaCard.addEventListener("click", MEDIA.displayMedia);
+          mediaDivSection.append(df);
         });
       }
-
-      //appending elements to media
-      mediaCardBody.append(mediaTitle, mediaType, mediaDate);
-      mediaCard.append(imgMedia, mediaCardBody);
-      df.append(mediaCard);
     });
-
-    let movieDiv = document.getElementById("media-content");
-    movieDiv.append(mediaDivSection);
   },
 };
 
