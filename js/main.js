@@ -167,11 +167,15 @@ const MEDIA = {
   setHistory: (ev) => {
     let actorMediaTarget = ev.target.closest(".div");
     MEDIA.mediaActorId = actorMediaTarget.getAttribute("data-id");
+    //test
+    // console.log(actorMediaTarget);
+
+
     history.pushState({}, "", `${location.hash}/${MEDIA.mediaActorId}`);
     MEDIA.displayMedia(MEDIA.mediaActorId);
   },
 
-  displayMedia: (ev) => {
+  displayMedia: (mediaActorId) => {
     // let actorMediaID = ev.target.closest(".div").getAttribute("data-id");
     // console.log(actorMediaID);// testing click on cards
 
@@ -212,6 +216,7 @@ const MEDIA = {
           //do an if statement of if the media is a tv show or a movie
 
           //media body
+          //error message here - body is not defined?
           let mediaCardBody = document.createElement("div");
           mediaCardBody.className = "media-body";
 
