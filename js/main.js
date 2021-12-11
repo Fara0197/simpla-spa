@@ -38,7 +38,7 @@ const SEARCH = {
 
   //search function
   doSearch: (input) => {
-    SEARCH.input = document.getElementById("search").value;
+    // SEARCH.input = document.getElementById("search").value;
     let key = STORAGE.base_key + SEARCH.input;
 
     if (key in localStorage) {
@@ -164,17 +164,20 @@ const MEDIA = {
 
   //history function
   setHistory: (ev) => {
-    let actorMediaID = ev.target.closest(".div").getAttribute("data-id");
-    // console.log(actorMediaID);
-    
+    let actorTarget = ev.target.closest(".div");
+    MEDIA.actorMediaID = actorTarget.getAttribute("data-id");
+    // console.log(actorTarget); test clicking on cards
+
     history.pushState({}, "", `${location.href}/${MEDIA.actorMediaID}`);
     MEDIA.displayMedia(MEDIA.actorMediaID);
   },
 
-  displayMedia: (actorMediaID) => {
+  displayMedia: (ev) => {
     console.log("media page - displayed"); //test
-    // let actorMediaID = ev.target.closest(".div").getAttribute("data-id");
-    // console.log(actorMediaID);// testing click on cards
+
+    let key = STORAGE.base_key + SEARCH.input;
+    let mediaInput = JSON.parse(localStorage.getItem(key));
+    // console.log(mediaInput);
 
     let actorsPage = document.getElementById("actors");
     let moviePage = document.getElementById("media");
@@ -182,44 +185,38 @@ const MEDIA = {
     actorsPage.style.display = "none";
     moviePage.style.display = "block";
 
-    //place the back button here
-
-    let key = STORAGE.base_key + SEARCH.input;
-    let mediaInput = JSON.parse(localStorage.getItem(key));
-  
-
     //main section - get main media page section
     let df = document.createDocumentFragment();
     let mediaDivSection = document.createElement("div");
     mediaDivSection.className = "card-div-media";
+
    
+
     //error message here:media not displaying anymore
     //function stops working here
-    mediaInput.forEach((actor) => {
-      if (actor.id == actorMediaID) { //function does not work here. 
-        console.log('test');
+    mediaInput.forEach((actor) => {//  console.log('test'); function works here
+      if (actor.id == MEDIA.actorMediaID) {//console.log('test')function does not work here.
         actor.known_for.forEach((media) => {
           // media cards
           let mediaCard = document.createElement("div");
           mediaCard.className = "media-card";
 
+
           //media image
-          // let imgMedia = document.createElement("img");
-          // imgMedia.className = "media-img";
-          // if (media.known_for.poster_path) {
-          //   imgMedia.src = APP.baseImageUrl + media.poster_path;
-          // } else {
-          //   //placeholder image
-          //   imgMedia.src = " https://via.placeholder.com/150";
-          // }
+          let imgMedia = document.createElement("img");
+          imgMedia.className = "media-img";
+          if (media.known_for.poster_path) {
+            imgMedia.src = APP.baseImageUrl + media.poster_path;
+          } else {
+            //placeholder image
+            imgMedia.src = " https://via.placeholder.com/150";
+          }
 
           imgMedia.style.maxWidth = "50%";
           imgMedia.alt = actor.name;
 
-          //do an if statement of if the media is a tv show or a movie
-
+    
           //media body
-          //error message here - body is not defined?
           let mediaCardBody = document.createElement("div");
           mediaCardBody.className = "media-body";
 
@@ -237,13 +234,16 @@ const MEDIA = {
           mediaDate.innerHTML = `Known for in Media: ${media.release_date}`;
 
           //appending elements to media
-          mediaCardBody.append(mediaTitle, mediaDate);
+          mediaCardBody.append(mediaTitle, MediaType, mediaDate);
           mediaCard.append(imgMedia, mediaCardBody);
-          mediaDivSection.append(mediaCard);
-
-          mediaCard.addEventListener("click", MEDIA.displayMedia);
-          mediaDivSection.append(df);
+          df.append(mediaCard);
         });
+
+        mediaDivSection.innerHTML = "";
+        mediaDivSection.append(df);
+
+        let mediaQuery = document.getElementById("media-content");
+        mediaQuery.append(cardDivSection);
       }
     });
   },

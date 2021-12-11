@@ -42,7 +42,7 @@ header h1 {
   text-shadow: 2px 2px 2px hsl(20, 10%, 30%);
 }
 h1 img{
-max-width: 30rem;
+max-width: 20rem;
 opacity: 0.6;
 }
 header form {
@@ -135,6 +135,7 @@ border: 0.5rem solid black;
 color: white;
 padding: 1rem;
 background-color: hsl(162, 11%, 42%);
+flex: 0 0 33.33333%;
 }
 
 .text-card-pop{
@@ -146,6 +147,18 @@ h3{
 padding: 0 1rem;
 margin: 1rem 0;
 font-size: 1.5rem;
+}
+
+#media button{
+text-decoration: none;
+font-size: 1rem;
+width: 6rem;
+color: white;
+background-color:hsl(168, 38%, 10%); 
+border: 1px solid black;
+border-radius: 1.5rem;
+padding: 0.4rem 1rem;
+margin-left:0.5rem;
 }
 /***********************
   Effects
@@ -191,7 +204,6 @@ font-size: 1.5rem;
     font-size: 6rem;
     color: hsla(20, 10%, 30%, 0.32);
     position: relative;
-    writing-mode: vertical-lr;
   }
 }
 @media all and (min-width: 1000px) {
