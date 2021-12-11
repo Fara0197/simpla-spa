@@ -8,8 +8,14 @@ const APP = {
 
   init: () => {
     //this function runs when the page loads and click listener on search
+    //call history api (obj, title, # what we want to appear in the url)
+    //when we search a name, it will appear in the url
+    history.replaceState(null, "", "#");
+
+    window.addEventListener("popstate", NAV.poppy);
+
     let searchBtn = document.getElementById("btnSearch");
-    searchBtn.addEventListener("click", SEARCH.doSearch);
+    searchBtn.addEventListener("click", SEARCH.getInput);
   },
 };
 
@@ -19,9 +25,19 @@ const SEARCH = {
   results: [],
   input: "",
 
-  //search function
-  doSearch: (ev) => {
+  //get the input (searched name - part four)
+  getInput: (ev) => {
     ev.preventDefault();
+    SEARCH.input = document.getElementById("search").value;
+    //use history or location.hash
+    history.pushState({}, "", `${location.hash}${SEARCH.input}`);
+
+    let input = location.hash;
+    SEARCH.doSearch(input);
+  },
+
+  //search function
+  doSearch: (input) => {
     SEARCH.input = document.getElementById("search").value;
     let key = STORAGE.base_key + SEARCH.input;
 
@@ -88,7 +104,7 @@ const ACTORS = {
       cardDiv.className = "div";
 
       //click listen for media name space
-      cardDiv.addEventListener("click", MEDIA.displayMedia);
+      cardDiv.addEventListener("click", MEDIA.setHistory);
       cardDiv.setAttribute("click", actor.id);
 
       //img div
@@ -144,10 +160,19 @@ const ACTORS = {
 //display known for object and (picture of media, title of media, year of media)
 //method: look inside index positions of actors in the array, and take the known for array to display the media
 const MEDIA = {
+  mediaActorId: null,
+  Media: [],
+
+  //history function
+  setHistory: (ev) => {
+    let actorMediaTarget = ev.target.closest(".div");
+    MEDIA.mediaActorId = actorMediaTarget.getAttribute("data-id");
+    history.pushState({}, "", `${location.hash}/${MEDIA.mediaActorId}`);
+    MEDIA.displayMedia(MEDIA.mediaActorId);
+  },
+
   displayMedia: (ev) => {
-    let actorMediaID = ev.target.closest(".div").getAttribute("data-id");
-    let mediaContent = document.querySelector("#media-content");
-    let df = document.createDocumentFragment();
+    // let actorMediaID = ev.target.closest(".div").getAttribute("data-id");
     // console.log(actorMediaID);// testing click on cards
 
     let actorsPage = document.getElementById("actors");
@@ -156,43 +181,55 @@ const MEDIA = {
     actorsPage.style.display = "none";
     moviePage.style.display = "block";
 
-    let mediaDivSection = document.createElement("div");
-    mediaDivSection.className = "media-card";
+    let key = STORAGE.base_key + SEARCH.input;
+    let media = JSON.parse(localStorage.getItem(key));
+    let df = document.createDocumentFragment();
+    //error message here: use actorMediaID?
+    media.forEach((actor) => {
+      if (actor.id == MEDIA.mediaActorId) {
+        actor.known_for.forEach((media) => {
+          //main section - media page
+          let mediaDivSection = document.createElement("div");
+          mediaDivSection.className = "media-section";
 
-    //error message here 
-    actorMediaID.forEach((media) => {
-      let mediaDiv = document.createElement("div");
-      mediaDiv.className = "div";
+          // media cards
+          let mediaCard = document.createElement("div");
+          mediaCard.className = "media-card";
 
-      let img = document.createElement("img");
-      img.className = "media-img";
-      if (actor.known_for.poster_path) {
-        img.src = APP.baseImageUrl + actor.known_for.poster_path;
-      } else {
-        //placeholder image
-        img.src = " https://via.placeholder.com/150";
+          //media image
+          let imgMedia = document.createElement("img");
+          imgMedia.className = "media-img";
+          if (media.known_for.poster_path) {
+            imgMedia.src = APP.baseImageUrl + media.poster_path;
+          } else {
+            //placeholder image
+            imgMedia.src = " https://via.placeholder.com/150";
+          }
+
+          imgMedia.style.maxWidth = "50%";
+          imgMedia.alt = actor.name;
+
+          //do an if statement of if the media is a tv show or a movie
+
+          //media body
+          let mediaCardBody = document.createElement("div");
+          mediaCardBody.className = "media-body";
+
+          //known for : title of media
+          let mediaTitle = document.createElement("h3");
+          mediaTitle.className = "text-card";
+          mediaTitle.innerHTML = `Known for in Media: ${media.original_title}`;
+        });
       }
 
-      img.style.maxWidth = "50%";
-      img.alt = actor.name;
-
-      let mediaBody = document.createElement("div");
-      mediaBody.className = 'media-body';
-
-
-      let divKnownForMedia = document.createElement("p");
-      divKnownForMedia.className = "text-card";
-      divKnownForMedia.innerHTML = `Known for in Media: ${actor.known_for[0].original_title}`; //test for media display    let 
-
-      //appending elements to media body
-
-      mediaBody.append(divKnownForMedia);
-      mediaDiv.append(mediaDiv, img);
-      df.append(mediaDiv);
+      //appending elements to media
+      mediaCardBody.append(mediaTitle);
+      mediaCard.append(imgMedia, mediaCardBody);
+      df.append(mediaCard);
     });
 
-    mediaDivSection.innerHTML = "";
-   mediaDivSection.append(df);
+    let movieDiv = document.getElementById("media-content");
+    movieDiv.append(mediaDivSection);
   },
 };
 
@@ -213,6 +250,12 @@ const STORAGE = {
 
 //nav is for anything connected to the history api and location: (spa 4)
 const NAV = {
+  poppy: () => {
+    let input = location.hash.replace("#", "");
+    SEARCH.input = input;
+    // console.log(input);
+    SEARCH.doSearch(input);
+  },
   //this will be used in Assign 4
 };
 

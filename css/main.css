@@ -188,7 +188,7 @@ font-size: 1.5rem;
   #actors h2,
   #media h2 {
     /* for the wider screens */
-    font-size: 12rem;
+    font-size: 6rem;
     color: hsla(20, 10%, 30%, 0.32);
     position: relative;
     writing-mode: vertical-lr;
