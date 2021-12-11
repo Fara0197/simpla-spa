@@ -224,11 +224,20 @@ const MEDIA = {
           let mediaTitle = document.createElement("h3");
           mediaTitle.className = "text-card";
           mediaTitle.innerHTML = `Known for in Media: ${media.original_title}`;
+
+          let mediaType = document.createElement("p");
+          mediaType.className = "text-card";
+          mediaType.innerHTML = `Known for in Media: ${media.media_type}`;
+
+          let mediaDate = document.createElement("p");
+          mediaDate.className = "text-card";
+          mediaDate.innerHTML = `Known for in Media: ${media.release_date}`;
+
         });
       }
 
       //appending elements to media
-      mediaCardBody.append(mediaTitle);
+      mediaCardBody.append(mediaTitle, mediaType, mediaDate);
       mediaCard.append(imgMedia, mediaCardBody);
       df.append(mediaCard);
     });
