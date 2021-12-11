@@ -30,7 +30,7 @@ const SEARCH = {
     ev.preventDefault();
     SEARCH.input = document.getElementById("search").value;
     //use history or location.hash
-    history.pushState({}, "", `${location.hash}${SEARCH.input}`);
+    history.pushState({}, "", `${location.href}${SEARCH.input}`);
 
     let input = location.hash;
     SEARCH.doSearch(input);
@@ -160,7 +160,7 @@ const ACTORS = {
 //display known for object and (picture of media, title of media, year of media)
 //method: look inside index positions of actors in the array, and take the known for array to display the media
 const MEDIA = {
-  medias: [],
+  // medias: [],
 
   //history function
   setHistory: (ev) => {
@@ -171,7 +171,7 @@ const MEDIA = {
     MEDIA.displayMedia(MEDIA.actorMediaID);
   },
 
-  displayMedia: (ev) => {
+  displayMedia: (actorMediaID) => {
     console.log("media page - displayed"); //test
     // let actorMediaID = ev.target.closest(".div").getAttribute("data-id");
     // console.log(actorMediaID);// testing click on cards
@@ -186,29 +186,32 @@ const MEDIA = {
 
     let key = STORAGE.base_key + SEARCH.input;
     let mediaInput = JSON.parse(localStorage.getItem(key));
-    let df = document.createDocumentFragment();
+  
 
     //main section - get main media page section
-    let mediaDivSection = document.getElementById("media-content");
+    let df = document.createDocumentFragment();
+    let mediaDivSection = document.createElement("div");
+    mediaDivSection.className = "card-div-media";
    
-    //error message here? media not displaying anymore
+    //error message here:media not displaying anymore
     //function stops working here
     mediaInput.forEach((actor) => {
-      if (actor.id == MEDIA.actorMediaID) {
+      if (actor.id == actorMediaID) { //function does not work here. 
+        console.log('test');
         actor.known_for.forEach((media) => {
           // media cards
           let mediaCard = document.createElement("div");
           mediaCard.className = "media-card";
 
           //media image
-          let imgMedia = document.createElement("img");
-          imgMedia.className = "media-img";
-          if (media.known_for.poster_path) {
-            imgMedia.src = APP.baseImageUrl + media.poster_path;
-          } else {
-            //placeholder image
-            imgMedia.src = " https://via.placeholder.com/150";
-          }
+          // let imgMedia = document.createElement("img");
+          // imgMedia.className = "media-img";
+          // if (media.known_for.poster_path) {
+          //   imgMedia.src = APP.baseImageUrl + media.poster_path;
+          // } else {
+          //   //placeholder image
+          //   imgMedia.src = " https://via.placeholder.com/150";
+          // }
 
           imgMedia.style.maxWidth = "50%";
           imgMedia.alt = actor.name;
