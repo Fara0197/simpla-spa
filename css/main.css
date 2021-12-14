@@ -189,7 +189,6 @@ padding: 0.8rem;
   margin-left: 0.5rem;
 }
 
-
 /***********************
   Effects
 ***********************/
@@ -205,7 +204,7 @@ padding: 0.8rem;
   transform: rotate(0)
   }
 }
-
+  
 @keyframes pulse {
   0% {
     transform: scale(1);

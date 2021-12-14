@@ -15,6 +15,8 @@ const APP = {
 
     let searchBtn = document.getElementById("btnSearch");
     searchBtn.addEventListener("click", SEARCH.getInput);
+  
+
   },
 
   //clear child DOM nodes under node provided - for actors and media methods
@@ -60,18 +62,21 @@ const SEARCH = {
 
   doFetch() {
     let url = `${APP.baseURL}search/person?api_key=${APP.key}&query=${SEARCH.input}&language=en-US`;
-    console.log("doing a fetch..");
+   
      
     fetch(url)
       .then((response) => {
         // see if it has an okay status
         if (response.ok) {
           return response.json();
+       
+       
         } else {
           throw new Error(
             `Error ${response.status_code} ${response.status_message}`
           );
         }
+        
       })
       //data returned from fetch
       .then((data) => {
