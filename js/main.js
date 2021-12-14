@@ -37,8 +37,9 @@ const SEARCH = {
     SEARCH.input = document.getElementById("search").value;
 
     //use history or location.hash
-    history.pushState({}, "", `${location.href}${SEARCH.input}`); //this compounded the search values
-    //create new variable to replace location.href and split
+    // //create new variable to replace location.href and split
+    // let uri = window.location.href.split('#')[0];
+    history.pushState({}, SEARCH.input, `#${SEARCH.input}`); //this compounded the search values
 
     let input = location.hash;
     SEARCH.doSearch(input);
@@ -101,6 +102,13 @@ const ACTORS = {
     let dFrag = document.createDocumentFragment();
     let cardDivSection = document.createElement("div");
     cardDivSection.className = "card-div";
+
+    //sorting click listener
+    let sortActorNames = document.getElementById("Sort-Name");
+    sortActorNames.addEventListener("click", ACTORS.sortActorNames);
+
+    let sortActorPop = document.getElementById("Sort-Pop");
+    sortActorPop.addEventListener("click", ACTORS.sortActorPop);
 
     //put click listener inside function below
     actorResults.forEach((actor) => {
@@ -165,7 +173,78 @@ const ACTORS = {
     actorDiv.append(cardDivSection);
   },
 
-  
+  //sorting function
+  sortActorNames: (ev) => {
+    let p = document.getElementById("Sort-Name");
+    p.classList.toggle("sort");
+
+    let key = STORAGE.base_key + SEARCH.input;
+    let dataName = JSON.parse(localStorage.getItem(key));
+    let dataNameCopy = [...dataName];
+
+    //sorting functions
+    let newDataName = dataNameCopy.sort((a, b) => {
+      let actorA = a.name;
+      let actorB = b.name;
+
+      if (p.classList.contains("sort")) {
+        if (actorA > actorB) {
+          return 1;
+        }
+        if (actorA < actorB) {
+          return -1;
+        }
+        return 0;
+      } else {
+        if (actorA < actorB) {
+          return 1;
+        }
+        if (actorA > actorB) {
+          return -1;
+        }
+        return 0;
+      }
+    });
+
+    ACTORS.sortActorNames = newDataName;
+    ACTORS.displayActor(ACTORS.sortActorNames);
+  },
+
+  sortActorPop: (ev) => {
+    let p = document.getElementById("Sort-Pop");
+    p.classList.toggle("sort");
+
+    let key = STORAGE.base_key + SEARCH.input;
+    let dataPop = JSON.parse(localStorage.getItem(key));
+    let dataPopCopy = [...dataPop];
+
+    //sorting functions
+    let newDataPop = dataPopCopy.sort((a, b) => {
+      let actorA = a.popularity;
+      let actorB = b.popularity;
+
+      if (p.classList.contains("sort")) {
+        if (actorA > actorB) {
+          return 1;
+        }
+        if (actorA < actorB) {
+          return -1;
+        }
+        return 0;
+      } else {
+        if (actorA < actorB) {
+          return 1;
+        }
+        if (actorA > actorB) {
+          return -1;
+        }
+        return 0;
+      }
+    });
+      
+    ACTORS.sortActorPop = newDataPop;
+    ACTORS.displayActor(ACTORS.sortActorPop);
+  },
 };
 
 //media is for changes connected to content in the media section

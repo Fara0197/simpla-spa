@@ -148,13 +148,29 @@ h3 {
   margin: 1rem 0;
   font-size: 1.5rem;
 }
-.sort-actors p {
-  font-size: 1.2rem;
+.sort-actors{
+padding: 0.8rem;
+}
+#Sort-Name,
+#Sort-Pop{
+  font-size: 0.9rem;
   display: inline;
   vertical-align: middle;
   padding: 0 1rem;
   margin: 1rem 0;
+  background-color: hsl(162, 11%, 42%);
+  border: 1px solid #000;
+  border-radius: 2rem;
+  color: white;
 }
+#Sort-Name:active,
+#Sort-Pop:active{
+  background-color: hsl(160, 5%, 78%);
+  border: 1px solid #000;
+  border-radius: 2rem;
+  color:  hsl(168, 38%, 10%);
+}
+
 
 #media button {
   text-decoration: none;
