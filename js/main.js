@@ -61,6 +61,7 @@ const SEARCH = {
   doFetch() {
     let url = `${APP.baseURL}search/person?api_key=${APP.key}&query=${SEARCH.input}&language=en-US`;
     console.log("doing a fetch..");
+     
     fetch(url)
       .then((response) => {
         // see if it has an okay status
@@ -81,6 +82,7 @@ const SEARCH = {
         STORAGE.setStorages(SEARCH.input, data.results);
         //display actions, create function for it
         ACTORS.displayActor(data.results);
+
       })
       .catch((err) => {
         alert(err.message);
@@ -91,7 +93,6 @@ const SEARCH = {
 //actors is for changes connected to content in the actors section
 const ACTORS = {
   actorsResults: [],
-
   displayActor: (actorResults) => {
     let homePage = document.getElementById("instructions");
     let actorsPage = document.getElementById("actors");
@@ -241,7 +242,7 @@ const ACTORS = {
         return 0;
       }
     });
-      
+
     ACTORS.sortActorPop = newDataPop;
     ACTORS.displayActor(ACTORS.sortActorPop);
   },
