@@ -11,11 +11,17 @@ const APP = {
     //call history api (obj, title, # what we want to appear in the url)
     //when we search a name, it will appear in the url
     history.replaceState(null, "", "#");
-
     window.addEventListener("popstate", NAV.poppy);
 
     let searchBtn = document.getElementById("btnSearch");
     searchBtn.addEventListener("click", SEARCH.getInput);
+  },
+
+  //clear child DOM nodes under node provided - for actors and media methods
+  clearDOMNodes(node) {
+    while (node.firstChild) {
+      node.removeChild(node.firstChild);
+    }
   },
 };
 
@@ -29,8 +35,10 @@ const SEARCH = {
   getInput: (ev) => {
     ev.preventDefault();
     SEARCH.input = document.getElementById("search").value;
+
     //use history or location.hash
-    history.pushState({}, "", `${location.href}${SEARCH.input}`);
+    history.pushState({}, "", `${location.href}${SEARCH.input}`); //this compounded the search values
+    //create new variable to replace location.href and split
 
     let input = location.hash;
     SEARCH.doSearch(input);
@@ -105,7 +113,7 @@ const ACTORS = {
 
       //click listen for media name space
       cardDiv.addEventListener("click", MEDIA.setHistory);
-      cardDiv.setAttribute("click", actor.id);
+      cardDiv.setAttribute("data-id", actor.id);
 
       //img div
       let img = document.createElement("img");
@@ -152,32 +160,33 @@ const ACTORS = {
     cardDivSection.append(dFrag);
 
     let actorDiv = document.getElementById("actor-Section");
+    //clear the child nodes under 'actor-section' div before searching new data
+    APP.clearDOMNodes(actorDiv);
     actorDiv.append(cardDivSection);
   },
+
+  
 };
 
 //media is for changes connected to content in the media section
 //display known for object and (picture of media, title of media, year of media)
 //method: look inside index positions of actors in the array, and take the known for array to display the media
 const MEDIA = {
+  actorMediaID: null,
   // medias: [],
 
   //history function
   setHistory: (ev) => {
     let actorTarget = ev.target.closest(".div");
     MEDIA.actorMediaID = actorTarget.getAttribute("data-id");
-    // console.log(actorTarget); test clicking on cards
 
-    history.pushState({}, "", `${location.href}/${MEDIA.actorMediaID}`);
+    history.pushState(null, "", `/#${SEARCH.input}/${MEDIA.actorMediaID}`);
     MEDIA.displayMedia(MEDIA.actorMediaID);
   },
 
   displayMedia: (ev) => {
-    console.log("media page - displayed"); //test
-
     let key = STORAGE.base_key + SEARCH.input;
     let mediaInput = JSON.parse(localStorage.getItem(key));
-    // console.log(mediaInput);
 
     let actorsPage = document.getElementById("actors");
     let moviePage = document.getElementById("media");
@@ -190,22 +199,18 @@ const MEDIA = {
     let mediaDivSection = document.createElement("div");
     mediaDivSection.className = "card-div-media";
 
-   
-
-    //error message here:media not displaying anymore
-    //function stops working here
-    mediaInput.forEach((actor) => {//  console.log('test'); function works here
-      if (actor.id == MEDIA.actorMediaID) {//console.log('test')function does not work here.
+    // Find actor and display their media details
+    mediaInput.forEach((actor) => {
+      if (actor.id == MEDIA.actorMediaID) {
         actor.known_for.forEach((media) => {
           // media cards
           let mediaCard = document.createElement("div");
           mediaCard.className = "media-card";
 
-
           //media image
           let imgMedia = document.createElement("img");
           imgMedia.className = "media-img";
-          if (media.known_for.poster_path) {
+          if (media.poster_path) {
             imgMedia.src = APP.baseImageUrl + media.poster_path;
           } else {
             //placeholder image
@@ -215,7 +220,6 @@ const MEDIA = {
           imgMedia.style.maxWidth = "50%";
           imgMedia.alt = actor.name;
 
-    
           //media body
           let mediaCardBody = document.createElement("div");
           mediaCardBody.className = "media-body";
@@ -223,18 +227,18 @@ const MEDIA = {
           //known for : title of media
           let mediaTitle = document.createElement("h3");
           mediaTitle.className = "text-card";
-          mediaTitle.innerHTML = `Known for in Media: ${media.original_title}`;
+          mediaTitle.innerHTML = `Media Title: ${media.original_title}`;
 
           let mediaType = document.createElement("p");
           mediaType.className = "text-card";
-          mediaType.innerHTML = `Known for in Media: ${media.media_type}`;
+          mediaType.innerHTML = `Media Type: ${media.media_type}`;
 
           let mediaDate = document.createElement("p");
           mediaDate.className = "text-card";
-          mediaDate.innerHTML = `Known for in Media: ${media.release_date}`;
+          mediaDate.innerHTML = `Release Date: ${media.release_date}`;
 
           //appending elements to media
-          mediaCardBody.append(mediaTitle, MediaType, mediaDate);
+          mediaCardBody.append(mediaTitle, mediaType, mediaDate);
           mediaCard.append(imgMedia, mediaCardBody);
           df.append(mediaCard);
         });
@@ -243,12 +247,14 @@ const MEDIA = {
         mediaDivSection.append(df);
 
         let mediaQuery = document.getElementById("media-content");
-        mediaQuery.append(cardDivSection);
+
+        // Clear child nodes under 'media-content' div before searching new data
+        APP.clearDOMNodes(mediaQuery);
+        mediaQuery.append(mediaDivSection);
       }
     });
   },
 };
-
 //storage is for working with local-storage
 const STORAGE = {
   //   this will be used in Assign 4
