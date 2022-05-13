@@ -11,11 +11,19 @@ const APP = {
     //call history api (obj, title, # what we want to appear in the url)
     //when we search a name, it will appear in the url
     history.replaceState(null, "", "#");
-
     window.addEventListener("popstate", NAV.poppy);
 
     let searchBtn = document.getElementById("btnSearch");
     searchBtn.addEventListener("click", SEARCH.getInput);
+  
+
+  },
+
+  //clear child DOM nodes under node provided - for actors and media methods
+  clearDOMNodes(node) {
+    while (node.firstChild) {
+      node.removeChild(node.firstChild);
+    }
   },
 };
 
@@ -29,8 +37,11 @@ const SEARCH = {
   getInput: (ev) => {
     ev.preventDefault();
     SEARCH.input = document.getElementById("search").value;
+
     //use history or location.hash
-    history.pushState({}, "", `${location.href}${SEARCH.input}`);
+    // //create new variable to replace location.href and split
+    // let uri = window.location.href.split('#')[0];
+    history.pushState({}, SEARCH.input, `#${SEARCH.input}`); //this compounded the search values
 
     let input = location.hash;
     SEARCH.doSearch(input);
@@ -38,7 +49,7 @@ const SEARCH = {
 
   //search function
   doSearch: (input) => {
-    SEARCH.input = document.getElementById("search").value;
+    // SEARCH.input = document.getElementById("search").value;
     let key = STORAGE.base_key + SEARCH.input;
 
     if (key in localStorage) {
@@ -51,17 +62,21 @@ const SEARCH = {
 
   doFetch() {
     let url = `${APP.baseURL}search/person?api_key=${APP.key}&query=${SEARCH.input}&language=en-US`;
-    console.log("doing a fetch..");
+   
+     
     fetch(url)
       .then((response) => {
         // see if it has an okay status
         if (response.ok) {
           return response.json();
+       
+       
         } else {
           throw new Error(
             `Error ${response.status_code} ${response.status_message}`
           );
         }
+        
       })
       //data returned from fetch
       .then((data) => {
@@ -72,6 +87,7 @@ const SEARCH = {
         STORAGE.setStorages(SEARCH.input, data.results);
         //display actions, create function for it
         ACTORS.displayActor(data.results);
+
       })
       .catch((err) => {
         alert(err.message);
@@ -82,7 +98,6 @@ const SEARCH = {
 //actors is for changes connected to content in the actors section
 const ACTORS = {
   actorsResults: [],
-
   displayActor: (actorResults) => {
     let homePage = document.getElementById("instructions");
     let actorsPage = document.getElementById("actors");
@@ -93,6 +108,13 @@ const ACTORS = {
     let dFrag = document.createDocumentFragment();
     let cardDivSection = document.createElement("div");
     cardDivSection.className = "card-div";
+
+    //sorting click listener
+    let sortActorNames = document.getElementById("Sort-Name");
+    sortActorNames.addEventListener("click", ACTORS.sortActorNames);
+
+    let sortActorPop = document.getElementById("Sort-Pop");
+    sortActorPop.addEventListener("click", ACTORS.sortActorPop);
 
     //put click listener inside function below
     actorResults.forEach((actor) => {
@@ -105,7 +127,7 @@ const ACTORS = {
 
       //click listen for media name space
       cardDiv.addEventListener("click", MEDIA.setHistory);
-      cardDiv.setAttribute("click", actor.id);
+      cardDiv.setAttribute("data-id", actor.id);
 
       //img div
       let img = document.createElement("img");
@@ -152,7 +174,82 @@ const ACTORS = {
     cardDivSection.append(dFrag);
 
     let actorDiv = document.getElementById("actor-Section");
+    //clear the child nodes under 'actor-section' div before searching new data
+    APP.clearDOMNodes(actorDiv);
     actorDiv.append(cardDivSection);
+  },
+
+  //sorting function
+  sortActorNames: (ev) => {
+    let p = document.getElementById("Sort-Name");
+    p.classList.toggle("sort");
+
+    let key = STORAGE.base_key + SEARCH.input;
+    let dataName = JSON.parse(localStorage.getItem(key));
+    let dataNameCopy = [...dataName];
+
+    //sorting functions
+    let newDataName = dataNameCopy.sort((a, b) => {
+      let actorA = a.name;
+      let actorB = b.name;
+
+      if (p.classList.contains("sort")) {
+        if (actorA > actorB) {
+          return 1;
+        }
+        if (actorA < actorB) {
+          return -1;
+        }
+        return 0;
+      } else {
+        if (actorA < actorB) {
+          return 1;
+        }
+        if (actorA > actorB) {
+          return -1;
+        }
+        return 0;
+      }
+    });
+
+    ACTORS.sortActorNames = newDataName;
+    ACTORS.displayActor(ACTORS.sortActorNames);
+  },
+
+  sortActorPop: (ev) => {
+    let p = document.getElementById("Sort-Pop");
+    p.classList.toggle("sort");
+
+    let key = STORAGE.base_key + SEARCH.input;
+    let dataPop = JSON.parse(localStorage.getItem(key));
+    let dataPopCopy = [...dataPop];
+
+    //sorting functions
+    let newDataPop = dataPopCopy.sort((a, b) => {
+      let actorA = a.popularity;
+      let actorB = b.popularity;
+
+      if (p.classList.contains("sort")) {
+        if (actorA > actorB) {
+          return 1;
+        }
+        if (actorA < actorB) {
+          return -1;
+        }
+        return 0;
+      } else {
+        if (actorA < actorB) {
+          return 1;
+        }
+        if (actorA > actorB) {
+          return -1;
+        }
+        return 0;
+      }
+    });
+
+    ACTORS.sortActorPop = newDataPop;
+    ACTORS.displayActor(ACTORS.sortActorPop);
   },
 };
 
@@ -160,21 +257,21 @@ const ACTORS = {
 //display known for object and (picture of media, title of media, year of media)
 //method: look inside index positions of actors in the array, and take the known for array to display the media
 const MEDIA = {
+  actorMediaID: null,
   // medias: [],
 
   //history function
   setHistory: (ev) => {
-    let actorMediaID = ev.target.closest(".div").getAttribute("data-id");
-    // console.log(actorMediaID);
-    
-    history.pushState({}, "", `${location.href}/${MEDIA.actorMediaID}`);
+    let actorTarget = ev.target.closest(".div");
+    MEDIA.actorMediaID = actorTarget.getAttribute("data-id");
+
+    history.pushState(null, "", `/#${SEARCH.input}/${MEDIA.actorMediaID}`);
     MEDIA.displayMedia(MEDIA.actorMediaID);
   },
 
-  displayMedia: (actorMediaID) => {
-    console.log("media page - displayed"); //test
-    // let actorMediaID = ev.target.closest(".div").getAttribute("data-id");
-    // console.log(actorMediaID);// testing click on cards
+  displayMedia: (ev) => {
+    let key = STORAGE.base_key + SEARCH.input;
+    let mediaInput = JSON.parse(localStorage.getItem(key));
 
     let actorsPage = document.getElementById("actors");
     let moviePage = document.getElementById("media");
@@ -182,73 +279,67 @@ const MEDIA = {
     actorsPage.style.display = "none";
     moviePage.style.display = "block";
 
-    //place the back button here
-
-    let key = STORAGE.base_key + SEARCH.input;
-    let mediaInput = JSON.parse(localStorage.getItem(key));
-  
-
     //main section - get main media page section
     let df = document.createDocumentFragment();
     let mediaDivSection = document.createElement("div");
     mediaDivSection.className = "card-div-media";
-   
-    //error message here:media not displaying anymore
-    //function stops working here
+
+    // Find actor and display their media details
     mediaInput.forEach((actor) => {
-      if (actor.id == actorMediaID) { //function does not work here. 
-        console.log('test');
+      if (actor.id == MEDIA.actorMediaID) {
         actor.known_for.forEach((media) => {
           // media cards
           let mediaCard = document.createElement("div");
           mediaCard.className = "media-card";
 
           //media image
-          // let imgMedia = document.createElement("img");
-          // imgMedia.className = "media-img";
-          // if (media.known_for.poster_path) {
-          //   imgMedia.src = APP.baseImageUrl + media.poster_path;
-          // } else {
-          //   //placeholder image
-          //   imgMedia.src = " https://via.placeholder.com/150";
-          // }
+          let imgMedia = document.createElement("img");
+          imgMedia.className = "media-img";
+          if (media.poster_path) {
+            imgMedia.src = APP.baseImageUrl + media.poster_path;
+          } else {
+            //placeholder image
+            imgMedia.src = " https://via.placeholder.com/150";
+          }
 
           imgMedia.style.maxWidth = "50%";
           imgMedia.alt = actor.name;
 
-          //do an if statement of if the media is a tv show or a movie
-
           //media body
-          //error message here - body is not defined?
           let mediaCardBody = document.createElement("div");
           mediaCardBody.className = "media-body";
 
           //known for : title of media
           let mediaTitle = document.createElement("h3");
           mediaTitle.className = "text-card";
-          mediaTitle.innerHTML = `Known for in Media: ${media.original_title}`;
+          mediaTitle.innerHTML = `Media Title: ${media.original_title}`;
 
           let mediaType = document.createElement("p");
           mediaType.className = "text-card";
-          mediaType.innerHTML = `Known for in Media: ${media.media_type}`;
+          mediaType.innerHTML = `Media Type: ${media.media_type}`;
 
           let mediaDate = document.createElement("p");
           mediaDate.className = "text-card";
-          mediaDate.innerHTML = `Known for in Media: ${media.release_date}`;
+          mediaDate.innerHTML = `Release Date: ${media.release_date}`;
 
           //appending elements to media
-          mediaCardBody.append(mediaTitle, mediaDate);
+          mediaCardBody.append(mediaTitle, mediaType, mediaDate);
           mediaCard.append(imgMedia, mediaCardBody);
-          mediaDivSection.append(mediaCard);
-
-          mediaCard.addEventListener("click", MEDIA.displayMedia);
-          mediaDivSection.append(df);
+          df.append(mediaCard);
         });
+
+        mediaDivSection.innerHTML = "";
+        mediaDivSection.append(df);
+
+        let mediaQuery = document.getElementById("media-content");
+
+        // Clear child nodes under 'media-content' div before searching new data
+        APP.clearDOMNodes(mediaQuery);
+        mediaQuery.append(mediaDivSection);
       }
     });
   },
 };
-
 //storage is for working with local-storage
 const STORAGE = {
   //   this will be used in Assign 4

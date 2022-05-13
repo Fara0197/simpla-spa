@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@300;500&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Raleway:wght@300;500&display=swap");
 
 *,
 *::before,
@@ -8,8 +8,8 @@
   box-sizing: border-box;
 }
 html {
-  font-family: Raleway, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-    Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-family: Raleway, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
   font-weight: 300;
   font-size: 20px;
   line-height: 1.5;
@@ -41,9 +41,9 @@ header form {
 header h1 {
   text-shadow: 2px 2px 2px hsl(20, 10%, 30%);
 }
-h1 img{
-max-width: 30rem;
-opacity: 0.6;
+h1 img {
+  max-width: 20rem;
+  opacity: 0.6;
 }
 header form {
   display: flex;
@@ -55,8 +55,8 @@ header form {
   font-size: 1rem;
   line-height: 1;
   padding: 0.25rem 1rem;
-  font-family: Raleway, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-    Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-family: Raleway, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
   font-weight: 300;
   min-width: 30ch;
 }
@@ -82,6 +82,7 @@ header form {
   margin-left: -2.2rem;
   border: none;
   background-color: white;
+  
 }
 
 /*******************
@@ -90,17 +91,20 @@ header form {
 
 #instructions {
   display: block;
+  
 }
 #actors {
   display: none;
 }
 #media {
   display: none;
+  
 }
 #instructions.active,
 #actors.active,
 #media.active {
   display: block;
+
 }
 #instructions h2,
 #actors h2,
@@ -117,39 +121,90 @@ header form {
   color: white;
   display: flex;
   flex-wrap: wrap;
+}
 
+.card-div, 
+.card-div-media {
+  background-color: hsl(168, 38%, 10%);
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  margin: 0;
+  justify-content: center;
+  overflow: hidden;
+  animation: transitionPage 0.8s;
+}
+
+.div,
+.media-card{
+  border: 0.5rem solid black;
+  color: white;
+  padding: 1rem;
+  background-color: hsl(162, 11%, 42%);
+}
+
+.text-card-pop {
+  font-weight: bolder;
+  text-decoration: underline;
+}
+
+h3 {
+  padding: 0 1rem;
+  margin: 1rem 0;
+  font-size: 1.5rem;
+}
+.sort-actors{
+padding: 0.8rem;
+}
+#Sort-Name,
+#Sort-Pop{
+  font-size: 0.9rem;
+  display: inline;
+  vertical-align: middle;
+  padding: 0 1rem;
+  margin: 1rem 0;
+  background-color: hsl(162, 11%, 42%);
+  border: 1px solid #000;
+  border-radius: 2rem;
+  color: white;
+}
+#Sort-Name:active,
+#Sort-Pop:active{
+  background-color: hsl(160, 5%, 78%);
+  border: 1px solid #000;
+  border-radius: 2rem;
+  color:  hsl(168, 38%, 10%);
 }
 
 
-.card-div{
-background-color: hsl(168, 38%, 10%);
-display:flex;
-flex-wrap: wrap;
-flex-direction:row;
-margin: 0;
-justify-content: center;
-overflow: hidden;
-}
-.div{
-border: 0.5rem solid black;
-color: white;
-padding: 1rem;
-background-color: hsl(162, 11%, 42%);
+#media button {
+  text-decoration: none;
+  font-size: 1rem;
+  width: 6rem;
+  color: white;
+  background-color: hsl(168, 38%, 10%);
+  border: 1px solid black;
+  border-radius: 1.5rem;
+  padding: 0.4rem 1rem;
+  margin-left: 0.5rem;
 }
 
-.text-card-pop{
-font-weight: bolder;
-text-decoration: underline;
-}
-
-h3{
-padding: 0 1rem;
-margin: 1rem 0;
-font-size: 1.5rem;
-}
 /***********************
   Effects
 ***********************/
+
+@keyframes transitionPage {
+
+  0%{
+  opacity: 0;
+  transform: rotateX(-10deg);
+  }
+  100%{
+  opacity: 1;
+  transform: rotate(0)
+  }
+}
+  
 @keyframes pulse {
   0% {
     transform: scale(1);
@@ -191,7 +246,6 @@ font-size: 1.5rem;
     font-size: 6rem;
     color: hsla(20, 10%, 30%, 0.32);
     position: relative;
-    writing-mode: vertical-lr;
   }
 }
 @media all and (min-width: 1000px) {
@@ -206,5 +260,3 @@ font-size: 1.5rem;
     width: 42px;
   }
 }
-
-

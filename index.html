@@ -3,15 +3,16 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Simple Movie SPA</title>
-    <link rel="stylesheet" href="/css/main.css"/>
+    <title>Movie SPA</title>
+    <link rel="stylesheet" href="/css/main.css" />
     <script src="./js/iconic.min.js"></script>
     <script src="js/main.js" defer></script>
   </head>
   <body>
     <header>
-      <h1>Actors &amp; Shows
-        <img src="/img/movie_logo.svg" alt="movie-logo">
+      <h1>
+        Actors &amp; Shows
+        <img src="/img/movie_logo.svg" alt="movie-logo" />
       </h1>
       <form>
         <input type="search" id="search" value="" placeholder="Actor Name" />
@@ -40,20 +41,19 @@
       </section>
       <section id="actors" class="active">
         <h2>Actors</h2>
+        <div class = "sort-actors">
+          <p id = "Sort-Name">Sort Actor Names</p>
+          <p id = "Sort-Pop">Sort Popularity </p>
+        </div>
         <div class="content">
-          <div id = 'actor-Section'>   
-            <!-- <p>Content grid will go here</p>
-            <p>Content grid will go here</p>
-            <p>Content grid will go here</p>
-            <p>Content grid will go here</p> -->
+          <div id="actor-Section">
           </div>
         </div>
       </section>
+ 
       <section id="media">
-        <!-- <button id = "previous-page">previous page</button> -->
-        <h2>Media</h2>
-        <div id="media-content"></div>
+          <div id="media-content"></div>
       </section>
     </main>
   </body>
-</html>
+</html
