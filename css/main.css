@@ -26,9 +26,6 @@ body {
 header {
   background-color: hsl(168, 38%, 10%);
   color: hsl(20, 40%, 100%);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
   align-items: center;
   min-height: 15vh;
   font-size: 1rem;
@@ -41,15 +38,17 @@ header form {
 header h1 {
   text-shadow: 2px 2px 2px hsl(20, 10%, 30%);
 }
-h1 img {
-  max-width: 20rem;
+img {
+  max-width: 10rem;
   opacity: 0.6;
 }
-header form {
+form,
+h1, img {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-right: 1rem;
+  margin: auto;
+  width: 50%;
 }
 #search {
   font-size: 1rem;
@@ -82,7 +81,6 @@ header form {
   margin-left: -2.2rem;
   border: none;
   background-color: white;
-  
 }
 
 /*******************
@@ -91,39 +89,37 @@ header form {
 
 #instructions {
   display: block;
-  
+  margin: auto;
+  width: 50%;
 }
 #actors {
   display: none;
 }
 #media {
   display: none;
-  
 }
 #instructions.active,
 #actors.active,
 #media.active {
   display: block;
-
 }
 #instructions h2,
 #actors h2,
 #media h2 {
   font-weight: 500;
   font-size: 3rem;
-  color: hsl(20, 10%, 30%);
+  color: hsl(171, 23%, 24%);
   padding: 1rem;
 }
 
 .content p {
   padding: 0 1rem;
   margin: 1rem 0;
-  color: white;
   display: flex;
   flex-wrap: wrap;
 }
 
-.card-div, 
+.card-div,
 .card-div-media {
   background-color: hsl(168, 38%, 10%);
   display: flex;
@@ -136,7 +132,7 @@ header form {
 }
 
 .div,
-.media-card{
+.media-card {
   border: 0.5rem solid black;
   color: white;
   padding: 1rem;
@@ -153,33 +149,53 @@ h3 {
   margin: 1rem 0;
   font-size: 1.5rem;
 }
-.sort-actors{
-padding: 0.8rem;
+.sort-actors {
+  padding: 0.8rem;
 }
+
 #Sort-Name,
-#Sort-Pop{
-  font-size: 0.9rem;
+#Sort-Pop {
+  cursor: pointer;
   display: inline;
   vertical-align: middle;
-  padding: 0 1rem;
-  margin: 1rem 0;
-  background-color: hsl(162, 11%, 42%);
-  border: 1px solid #000;
-  border-radius: 2rem;
-  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  height: 48px;
+  padding: 3px 24px;
+  align-items: center;
+  appearance: none;
+  background-color: #fff;
+  border-radius: 24px;
+  border-style: none;
+  box-shadow: rgba(0, 0, 0, .2) 0 3px 5px -1px,rgba(0, 0, 0, .14) 0 6px 10px 0,rgba(0, 0, 0, .12) 0 1px 18px 0;
+  box-sizing: border-box;
+  letter-spacing: .25px;
+  color: #3c4043;
 }
 #Sort-Name:active,
-#Sort-Pop:active{
+#Sort-Pop:active {
   background-color: hsl(160, 5%, 78%);
   border: 1px solid #000;
   border-radius: 2rem;
-  color:  hsl(168, 38%, 10%);
+  color: hsl(168, 38%, 10%);
 }
-
+.home-nav a {
+  color: hsla(184, 44%, 22%, 0.988);
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 500;
+  height: 48px;
+  justify-content: center;
+  letter-spacing: .25px;
+  padding: 0.4rem 1rem;
+  margin-left: 0.5rem;
+  cursor: pointer;
+  
+}
 
 #media button {
   text-decoration: none;
-  font-size: 1rem;
+  font-size: 2rem;
   width: 6rem;
   color: white;
   background-color: hsl(168, 38%, 10%);
@@ -194,17 +210,16 @@ padding: 0.8rem;
 ***********************/
 
 @keyframes transitionPage {
-
-  0%{
-  opacity: 0;
-  transform: rotateX(-10deg);
+  0% {
+    opacity: 0;
+    transform: rotateX(-10deg);
   }
-  100%{
-  opacity: 1;
-  transform: rotate(0)
+  100% {
+    opacity: 1;
+    transform: rotate(0);
   }
 }
-  
+
 @keyframes pulse {
   0% {
     transform: scale(1);
@@ -244,7 +259,7 @@ padding: 0.8rem;
   #media h2 {
     /* for the wider screens */
     font-size: 6rem;
-    color: hsla(20, 10%, 30%, 0.32);
+    color: hsla(183, 41%, 25%, 0.32);
     position: relative;
   }
 }

@@ -5,15 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Movie SPA</title>
     <link rel="stylesheet" href="/css/main.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
     <script src="./js/iconic.min.js"></script>
-    <script src="js/main.js" defer></script>
+    <script src="./js/main.js" defer></script>
   </head>
   <body>
+    <div class="home-nav">
+      <a href="./index.html">Home</a>
+
+      
+     </div>
     <header>
       <h1>
-        Actors &amp; Shows
-        <img src="/img/movie_logo.svg" alt="movie-logo" />
+        Movie Spa
       </h1>
+      <img src="./img/movie_logo.svg" alt="movie-logo" />
       <form>
         <input type="search" id="search" value="" placeholder="Actor Name" />
         <button id="btnSearch" class="pulse">
@@ -40,11 +46,13 @@
         </div>
       </section>
       <section id="actors" class="active">
-        <h2>Actors</h2>
+  
         <div class = "sort-actors">
+          <h2>Names</h2>
           <p id = "Sort-Name">Sort Actor Names</p>
           <p id = "Sort-Pop">Sort Popularity </p>
         </div>
+      
         <div class="content">
           <div id="actor-Section">
           </div>
@@ -52,7 +60,10 @@
       </section>
  
       <section id="media">
-          <div id="media-content"></div>
+        <h2>Movies & Shows</h2>
+          <div id="media-content">
+      
+          </div>
       </section>
     </main>
   </body>
